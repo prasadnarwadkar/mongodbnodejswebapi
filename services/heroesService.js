@@ -1,7 +1,13 @@
 "use strict";
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-const url = "mongodb://smsystem.documents.azure.com:10255/?ssl=true";
+//const url = "mongodb://smsystem.documents.azure.com:10255/?ssl=true";
+
+const url = "mongodb+srv://@cluster0-7ox65.mongodb.net/test?retryWrites=true";
+const db_name = "TestDb";
+const coll_name = "MyDocs";
+const user_name = 'prasadn_140274';
+const password = 'Tetya123';
 
 class HeroesService {
     constructor(req, res) {
@@ -14,7 +20,7 @@ class HeroesService {
         myobj.id = Math.floor(Math.random() * (1000 - 1) + 1);
         myobj.name = heroItem.name;
 
-        db.db("smsystem").collection('Users').insertOne(myobj, function () {
+        db.db(db_name).collection(coll_name).insertOne(myobj, function () {
             callback()
         })
     }
@@ -25,7 +31,7 @@ class HeroesService {
         var myquery = {};
         myquery.id = heroItem.id;
         
-        db.db("smsystem").collection('Users').updateOne(myquery, newvalues, 
+        db.db(db_name).collection(coll_name).updateOne(myquery, newvalues, 
             function () {
             callback()
         })
@@ -38,8 +44,8 @@ class HeroesService {
         console.log(heroItem.name);
         try {
             var options = { auth: {
-                user: 'smsystem',
-                password: 'kaDXI5Zkmxhe0CMGSVBQMPwulIQ5KgRt76oeMEDyb6XM5LbgMhZGeQ2ARDAfz6LOdAbGr83JovKKElw57bvNBw==',
+                user: user_name,
+                password: password,
                }, useNewUrlParser: true };
 
             MongoClient.connect(url, options, function (err, db) {
@@ -67,8 +73,8 @@ class HeroesService {
         console.log(heroItem.name);
         try {
             var options = { auth: {
-                user: 'smsystem',
-                password: 'kaDXI5Zkmxhe0CMGSVBQMPwulIQ5KgRt76oeMEDyb6XM5LbgMhZGeQ2ARDAfz6LOdAbGr83JovKKElw57bvNBw==',
+                user: user_name,
+                password: password,
                }, useNewUrlParser: true };
 
             MongoClient.connect(url, options, function (err, db) {
@@ -101,15 +107,15 @@ class HeroesService {
         let heroList = [];
         try {
             var options = { auth: {
-                user: 'smsystem',
-                password: 'kaDXI5Zkmxhe0CMGSVBQMPwulIQ5KgRt76oeMEDyb6XM5LbgMhZGeQ2ARDAfz6LOdAbGr83JovKKElw57bvNBw==',
+                user: user_name,
+                password: password,
                }, useNewUrlParser: true };
 
             MongoClient.connect(url, options, function (err, db) {
                 console.log('get hero');
                 assert.equal(null, err);
 
-                db.db("smsystem").collection('Users')
+                db.db(db_name).collection(coll_name)
                     .find()
                     .toArray()
                     .then((users) => {
@@ -119,13 +125,7 @@ class HeroesService {
                     .catch((err) => {
                         //sendError(err, res);
                     });
-
-
-
-
             });
-
-
         }
         catch (error) {
             return self.res.status(500).json({
